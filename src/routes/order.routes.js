@@ -1,0 +1,13 @@
+const express = require("express");
+const auth = require("../middlewares/auth");
+const role = require("../middlewares/role");
+const {order} = require("../validators/schemas");
+const validate = require("../validators/validation.middleware");
+const {placeOrder,getMyOrders,getAllOrders,updateOrderStatus, cancelOrder} = require("../controllers/order.Controller");
+const router = express.Router();
+router.post("/",auth,validate(order.place),placeOrder);
+router.get("/my-orders",auth,getMyOrders);
+router.get("/",auth,role("ADMIN"),getAllOrders);
+router.put("/:orderId",auth,role("ADMIN"),updateOrderStatus);
+router.put("/cancel/:orderId",auth,cancelOrder);
+module.exports = router;
